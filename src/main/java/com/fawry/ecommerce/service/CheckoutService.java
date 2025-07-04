@@ -2,9 +2,9 @@ package com.fawry.ecommerce.service;
 
 import com.fawry.ecommerce.exception.*;
 import com.fawry.ecommerce.model.*;
+import com.fawry.ecommerce.adapter.ProductShippableAdapter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CheckoutService {
 
@@ -17,6 +17,33 @@ public class CheckoutService {
     }
 
     public void checkout(Customer customer, Cart cart) {
+        validateCart(cart);
+
+        // Collect shippable items
+        List<Shippable> shippableItems = cart.getItems().stream()
+            .filter(item -> item.getProduct().isShippable())
+            .map(item -> new ProductShippableAdapter(item.getProduct(), item.getQuantity()))
+            .collect(java.util.stream.Collectors.toList());
+
+        double subtotal = calculateSubtotal(cart.getItems());
+        double shippingFee = shippingService.calculateShippingFee(shippableItems);
+        double totalAmount = subtotal + shippingFee;
+
+        if (customer.getBalance() < totalAmount) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+
+        processOrder(cart.getItems(), customer, totalAmount);
+
+        // Ship items
+        shippingService.ship(shippableItems);
+
+        // Print receipt
+        receiptPrinter.printCheckoutReceipt(cart.getItems(), subtotal, shippingFee,
+                totalAmount, customer.getBalance());
+    }
+
+    private void validateCart(Cart cart) {
         if (cart.getItems().isEmpty()) {
             throw new EmptyCartException("Cart is empty");
         }
@@ -29,33 +56,20 @@ public class CheckoutService {
                 throw new OutOfStockException("Product " + item.getProductName() + " is out of stock");
             }
         }
+    }
 
-        double subtotal = cart.getItems().stream()
+    private double calculateSubtotal(List<OrderItem> items) {
+        return items.stream()
                 .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
                 .sum();
+    }
 
-        List<OrderItem> shippableItems = cart.getItems().stream()
-                .filter(item -> item.getProduct().isShippable())
-                .collect(Collectors.toList());
-
-        double shippingFee = shippingService.calculateShippingFee(shippableItems);
-        double totalAmount = subtotal + shippingFee;
-
-        if (customer.getBalance() < totalAmount) {
-            throw new InsufficientBalanceException("Insufficient balance");
-        }
-
+    private void processOrder(List<OrderItem> items, Customer customer, double totalAmount) {
         // Deduct product quantities
-        for (OrderItem item : cart.getItems()) {
+        for (OrderItem item : items) {
             item.getProduct().reduceQuantity(item.getQuantity());
         }
 
         customer.deductBalance(totalAmount);
-
-        // Ship items
-        shippingService.ship(shippableItems);
-
-        // Print receipt
-        receiptPrinter.printCheckoutReceipt(cart.getItems(), subtotal, shippingFee, totalAmount, customer.getBalance());
     }
 }

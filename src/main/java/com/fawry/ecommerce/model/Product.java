@@ -1,22 +1,38 @@
 package com.fawry.ecommerce.model;
 
-public abstract class Product {
-    protected String name;
-    protected double price;
-    protected int quantity;
-    protected boolean isShippable;
-    protected double weight; // in kg
+import com.fawry.ecommerce.behavior.ExpiryBehavior;
+import com.fawry.ecommerce.behavior.ShippingBehavior;
 
-    public Product(String name, double price, int quantity, boolean isShippable, double weight) {
+public class Product {
+    private String name;
+    private double price;
+    private int quantity;
+    private ExpiryBehavior expiryBehavior;
+    private ShippingBehavior shippingBehavior;
+
+    public Product(String name, double price, int quantity,
+                   ExpiryBehavior expiryBehavior, ShippingBehavior shippingBehavior) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.isShippable = isShippable;
-        this.weight = weight;
+        this.expiryBehavior = expiryBehavior;
+        this.shippingBehavior = shippingBehavior;
     }
 
-    public abstract boolean isExpired();
+    // Delegate behavior to strategy objects
+    public boolean isExpired() {
+        return expiryBehavior.isExpired();
+    }
 
+    public boolean isShippable() {
+        return shippingBehavior.isShippable();
+    }
+
+    public double getShippingWeight() {
+        return shippingBehavior.getWeight();
+    }
+
+    // Standard getters
     public String getName() {
         return name;
     }
@@ -27,14 +43,6 @@ public abstract class Product {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public boolean isShippable() {
-        return isShippable;
-    }
-
-    public double getWeight() {
-        return weight;
     }
 
     public void reduceQuantity(int qty) {
