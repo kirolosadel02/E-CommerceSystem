@@ -26,16 +26,16 @@ I have implemented all the required functionalities in the project requirements.
 ## Screenshots
 
 Code output example 1:
-![Code Output 1](CodeOutput/FawryNoProblems.png)
+![Code Output 1](https://github.com/kirolosadel02/E-CommerceSystem/blob/main/Code%20Output/FawryInsufficientBalance.png)
 
 Code output example 2:
-![Code Output 2](CodeOutput/FawryOutOfStock.png)
+![Code Output 2](https://github.com/kirolosadel02/E-CommerceSystem/blob/main/Code%20Output/FawryNoProblems.png)
 
 Code output example 3:
-![Code Output 3](CodeOutput/FawryInsufficientBalance.png)
+![Code Output 3](https://github.com/kirolosadel02/E-CommerceSystem/blob/main/Code%20Output/FawryOutOfStock.png)
 
 Code output example 4:
-![Code Output 4](CodeOutput/FawryProductExpired.png)
+![Code Output 4](https://github.com/kirolosadel02/E-CommerceSystem/blob/main/Code%20Output/FawryProductExpired.png)
 
 ---
 
