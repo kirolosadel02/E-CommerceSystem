@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        Customer customer = new Customer("John", 10000);
+        Customer customer = new Customer("John", 1000);
 
         Product cheese = new ProductBuilder()
                 .setName("Cheese")

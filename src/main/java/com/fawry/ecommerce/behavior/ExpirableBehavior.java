@@ -3,7 +3,7 @@ package com.fawry.ecommerce.behavior;
 import java.time.LocalDate;
 
 public class ExpirableBehavior implements ExpiryBehavior {
-    private LocalDate expiryDate;
+    private final LocalDate expiryDate;
 
     public ExpirableBehavior(LocalDate expiryDate) {
         this.expiryDate = expiryDate;
@@ -12,9 +12,5 @@ public class ExpirableBehavior implements ExpiryBehavior {
     @Override
     public boolean isExpired() {
         return LocalDate.now().isAfter(expiryDate);
-    }
-
-    public LocalDate getExpiryDate() {
-        return expiryDate;
     }
 }

@@ -1,11 +1,9 @@
 package com.fawry.ecommerce.service;
 
-import com.fawry.ecommerce.model.OrderItem;
 import com.fawry.ecommerce.model.Shippable;
 import com.fawry.ecommerce.adapter.ProductShippableAdapter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ShippingService {
 

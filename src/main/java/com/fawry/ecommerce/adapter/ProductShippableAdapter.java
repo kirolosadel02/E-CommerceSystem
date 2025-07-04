@@ -4,8 +4,8 @@ import com.fawry.ecommerce.model.Product;
 import com.fawry.ecommerce.model.Shippable;
 
 public class ProductShippableAdapter implements Shippable {
-    private Product product;
-    private int quantity;
+    private final Product product;
+    private final int quantity;
 
     public ProductShippableAdapter(Product product, int quantity) {
         if (!product.isShippable()) {

@@ -1,7 +1,7 @@
 package com.fawry.ecommerce.model;
 
 public class Customer {
-    private String name;
+    private final String name;
     private double balance;
 
     public Customer(String name, double balance) {

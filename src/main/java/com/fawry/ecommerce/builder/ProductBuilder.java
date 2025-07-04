@@ -50,6 +50,12 @@ public class ProductBuilder {
         if (name == null || expiryBehavior == null || shippingBehavior == null) {
             throw new IllegalStateException("Product must have name, expiry behavior, and shipping behavior");
         }
+        if (price <= 0) {
+            throw new IllegalStateException("Product must have a positive price");
+        }
+        if (quantity < 0) {
+            throw new IllegalStateException("Product quantity cannot be negative");
+        }
         return new Product(name, price, quantity, expiryBehavior, shippingBehavior);
     }
 }

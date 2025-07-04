@@ -4,11 +4,11 @@ import com.fawry.ecommerce.behavior.ExpiryBehavior;
 import com.fawry.ecommerce.behavior.ShippingBehavior;
 
 public class Product {
-    private String name;
-    private double price;
+    private final String name;
+    private final double price;
     private int quantity;
-    private ExpiryBehavior expiryBehavior;
-    private ShippingBehavior shippingBehavior;
+    private final ExpiryBehavior expiryBehavior;
+    private final ShippingBehavior shippingBehavior;
 
     public Product(String name, double price, int quantity,
                    ExpiryBehavior expiryBehavior, ShippingBehavior shippingBehavior) {

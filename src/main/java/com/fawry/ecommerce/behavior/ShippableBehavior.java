@@ -1,7 +1,7 @@
 package com.fawry.ecommerce.behavior;
 
 public class ShippableBehavior implements ShippingBehavior {
-    private double weight;
+    private final double weight;
 
     public ShippableBehavior(double weight) {
         this.weight = weight;

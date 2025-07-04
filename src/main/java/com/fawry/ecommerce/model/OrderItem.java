@@ -1,8 +1,8 @@
 package com.fawry.ecommerce.model;
 
 public class OrderItem {
-    private Product product;
-    private int quantity;
+    private final Product product;
+    private final int quantity;
 
     public OrderItem(Product product, int quantity) {
         this.product = product;
@@ -11,10 +11,6 @@ public class OrderItem {
 
     public String getProductName() {
         return product.getName();
-    }
-
-    public double getTotalPrice() {
-        return product.getPrice() * quantity;
     }
 
     public int getQuantity() {
