@@ -1,0 +1,11 @@
+# Use LF line endings in text files
+* text=auto
+
+# Force specific files to use LF
+*.java text eol=lf
+*.xml text eol=lf
+*.md text eol=lf
+*.gitignore text eol=lf
+
+# Windows batch scripts can be CRLF
+*.bat text eol=crlf
