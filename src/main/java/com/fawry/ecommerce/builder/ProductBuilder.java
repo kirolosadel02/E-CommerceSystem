@@ -2,6 +2,7 @@ package com.fawry.ecommerce.builder;
 
 import com.fawry.ecommerce.model.Product;
 import com.fawry.ecommerce.behavior.*;
+import com.fawry.ecommerce.exception.ProductBuilderException;
 import java.time.LocalDate;
 
 public class ProductBuilder {
@@ -47,14 +48,20 @@ public class ProductBuilder {
     }
 
     public Product build() {
-        if (name == null || expiryBehavior == null || shippingBehavior == null) {
-            throw new IllegalStateException("Product must have name, expiry behavior, and shipping behavior");
+        if (name == null || name.trim().isEmpty()) {
+            throw new ProductBuilderException("Product name cannot be null or empty");
+        }
+        if (expiryBehavior == null) {
+            throw new ProductBuilderException("Product '" + name + "' must have expiry behavior set (expirable or non-expirable)");
+        }
+        if (shippingBehavior == null) {
+            throw new ProductBuilderException("Product '" + name + "' must have shipping behavior set (shippable or non-shippable)");
         }
         if (price <= 0) {
-            throw new IllegalStateException("Product must have a positive price");
+            throw new ProductBuilderException("Product '" + name + "' must have a positive price, got: " + price);
         }
         if (quantity < 0) {
-            throw new IllegalStateException("Product quantity cannot be negative");
+            throw new ProductBuilderException("Product '" + name + "' quantity cannot be negative, got: " + quantity);
         }
         return new Product(name, price, quantity, expiryBehavior, shippingBehavior);
     }

@@ -11,6 +11,7 @@ public class ExpirableBehavior implements ExpiryBehavior {
 
     @Override
     public boolean isExpired() {
-        return LocalDate.now().isAfter(expiryDate);
+        LocalDate today = LocalDate.now();
+        return today.isAfter(expiryDate) || today.isEqual(expiryDate);
     }
 }

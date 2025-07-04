@@ -18,8 +18,7 @@ public class ReceiptPrinterService {
             double itemWeight = shippable.getWeight();
             double totalItemWeight = itemWeight * quantity;
             String weightStr;
-            if (totalItemWeight >= 1.0) { // 1.0 kg = 1000g
-                // Show as kg, rounded to 1 decimal if needed
+            if (totalItemWeight >= 1.0) {
                 if (totalItemWeight == Math.floor(totalItemWeight)) {
                     weightStr = String.format("%.0fkg", totalItemWeight);
                 } else {

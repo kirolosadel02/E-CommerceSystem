@@ -2,6 +2,7 @@ package com.fawry.ecommerce.model;
 
 import com.fawry.ecommerce.behavior.ExpiryBehavior;
 import com.fawry.ecommerce.behavior.ShippingBehavior;
+import com.fawry.ecommerce.exception.InvalidQuantityException;
 
 public class Product {
     private final String name;
@@ -46,8 +47,11 @@ public class Product {
     }
 
     public void reduceQuantity(int qty) {
+        if (qty <= 0) {
+            throw new InvalidQuantityException("Quantity to reduce must be positive, got: " + qty);
+        }
         if (qty > quantity) {
-            throw new IllegalArgumentException("Not enough quantity in stock.");
+            throw new InvalidQuantityException("Cannot reduce quantity by " + qty + " when only " + quantity + " available for product: " + name);
         }
         this.quantity -= qty;
     }
