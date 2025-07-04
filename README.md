@@ -26,16 +26,16 @@ I have implemented all the required functionalities in the project requirements.
 ## Screenshots
 
 Code output example 1:
-![Code Output 1]("Code Output/FawryNoProblems.png")
+![Code Output 1](CodeOutput/FawryNoProblems.png)
 
 Code output example 2:
-![Code Output 2]("Code Output/FawryOutOfStock.png")
+![Code Output 2](CodeOutput/FawryOutOfStock.png)
 
 Code output example 3:
-![Code Output 3]("Code Output/FawryInsufficientBalance.png")
+![Code Output 3](CodeOutput/FawryInsufficientBalance.png)
 
 Code output example 4:
-![Code Output 4]("Code Output/FawryProductExpired.png")
+![Code Output 4](CodeOutput/FawryProductExpired.png)
 
 ---
 
