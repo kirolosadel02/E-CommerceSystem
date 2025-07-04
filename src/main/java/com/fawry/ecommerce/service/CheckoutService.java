@@ -19,7 +19,6 @@ public class CheckoutService {
     public void checkout(Customer customer, Cart cart) {
         validateCart(cart);
 
-        // Collect shippable items
         List<Shippable> shippableItems = cart.getItems().stream()
             .filter(item -> item.getProduct().isShippable())
             .map(item -> new ProductShippableAdapter(item.getProduct(), item.getQuantity()))
@@ -35,10 +34,8 @@ public class CheckoutService {
 
         processOrder(cart.getItems(), customer, totalAmount);
 
-        // Ship items
         shippingService.ship(shippableItems);
 
-        // Print receipt
         receiptPrinter.printCheckoutReceipt(cart.getItems(), subtotal, shippingFee,
                 totalAmount, customer.getBalance());
     }
@@ -65,7 +62,6 @@ public class CheckoutService {
     }
 
     private void processOrder(List<OrderItem> items, Customer customer, double totalAmount) {
-        // Deduct product quantities
         for (OrderItem item : items) {
             item.getProduct().reduceQuantity(item.getQuantity());
         }

@@ -24,7 +24,6 @@ public class ProductExpiryTest {
 
     @Test
     void shouldBeExpired_whenExpiryDateIsToday() {
-        // Business logic: Products are considered expired on their expiry date
         Product expiringToday = new ProductBuilder()
                 .setName("Expiring Today Cheese")
                 .setPrice(100)
@@ -111,14 +110,13 @@ public class ProductExpiryTest {
                 .setShippable(0.2)
                 .build();
         
-        // Multiple calls should return the same result
         boolean firstCheck = product.isExpired();
         boolean secondCheck = product.isExpired();
         boolean thirdCheck = product.isExpired();
         
         assertEquals(firstCheck, secondCheck);
         assertEquals(secondCheck, thirdCheck);
-        assertFalse(firstCheck); // Should not be expired
+        assertFalse(firstCheck);
     }
 
     @Test

@@ -36,6 +36,6 @@ public class ShippingService {
             }
             totalWeight += shippable.getWeight() * quantity;
         }
-        return totalWeight * 10; // 10 per kg
+        return totalWeight * 10;
     }
 }

@@ -20,7 +20,6 @@ public class Product {
         this.shippingBehavior = shippingBehavior;
     }
 
-    // Delegate behavior to strategy objects
     public boolean isExpired() {
         return expiryBehavior.isExpired();
     }
@@ -33,7 +32,6 @@ public class Product {
         return shippingBehavior.getWeight();
     }
 
-    // Standard getters
     public String getName() {
         return name;
     }

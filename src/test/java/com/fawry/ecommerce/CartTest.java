@@ -65,7 +65,7 @@ public class CartTest {
         cart.add(cheese, 1);
         cart.add(cheese, 2);
         
-        assertEquals(2, cart.getItems().size()); // Current implementation allows duplicates
+        assertEquals(2, cart.getItems().size());
         assertEquals(1, cart.getItems().get(0).getQuantity());
         assertEquals(2, cart.getItems().get(1).getQuantity());
     }

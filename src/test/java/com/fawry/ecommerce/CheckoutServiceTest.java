@@ -53,7 +53,6 @@ public class CheckoutServiceTest {
         Product cheese = new ProductBuilder().setName("Cheese").setPrice(100).setQuantity(1)
                 .setExpirable(LocalDate.now().plusDays(2)).setShippable(0.2).build();
         cart.add(cheese, 1);
-        // Simulate another order reducing stock
         cheese.reduceQuantity(1);
         Exception ex = assertThrows(OutOfStockException.class, () -> checkoutService.checkout(customer, cart));
         assertTrue(ex.getMessage().contains("is out of stock"));
@@ -64,7 +63,7 @@ public class CheckoutServiceTest {
         Product cheese = new ProductBuilder().setName("Cheese").setPrice(1000).setQuantity(2)
                 .setExpirable(LocalDate.now().plusDays(2)).setShippable(0.2).build();
         cart.add(cheese, 2);
-        customer = new Customer("John", 100); // Not enough balance
+        customer = new Customer("John", 100);
         Exception ex = assertThrows(InsufficientBalanceException.class, () -> checkoutService.checkout(customer, cart));
         assertEquals("Insufficient balance", ex.getMessage());
     }
