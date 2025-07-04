@@ -3,64 +3,59 @@ package com.fawry.ecommerce.service;
 import com.fawry.ecommerce.exception.*;
 import com.fawry.ecommerce.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CheckoutService {
-    private ShippingService shippingService;
 
-    public CheckoutService(ShippingService shippingService) {
+    private final ShippingService shippingService;
+    private final ReceiptPrinterService receiptPrinter;
+
+    public CheckoutService(ShippingService shippingService, ReceiptPrinterService receiptPrinter) {
         this.shippingService = shippingService;
+        this.receiptPrinter = receiptPrinter;
     }
 
     public void checkout(Customer customer, Cart cart) {
-        if (cart.isEmpty()) {
-            throw new EmptyCartException("Cart is empty.");
+        if (cart.getItems().isEmpty()) {
+            throw new EmptyCartException("Cart is empty");
         }
 
-        List<OrderItem> items = cart.getItems();
-        List<OrderItem> shippableItems = new ArrayList<>();
-
-        for (OrderItem item : items) {
-            Product product = item.getProduct();
-
-            if (product.isExpired()) {
-                throw new ProductExpiredException(product.getName() + " is expired.");
+        for (OrderItem item : cart.getItems()) {
+            if (item.getProduct().isExpired()) {
+                throw new ProductExpiredException("Product " + item.getProductName() + " is expired");
             }
-
-            if (item.getQuantity() > product.getQuantity()) {
-                throw new OutOfStockException(product.getName() + " does not have enough stock.");
-            }
-
-            product.reduceQuantity(item.getQuantity());
-
-            if (product.isShippable()) {
-                shippableItems.add(item);
+            if (item.getProduct().getQuantity() < item.getQuantity()) {
+                throw new OutOfStockException("Product " + item.getProductName() + " is out of stock");
             }
         }
 
-        double subtotal = cart.calculateSubtotal();
-        double shippingFee = shippableItems.isEmpty() ? 0 : shippingService.calculateShippingFee();
+        double subtotal = cart.getItems().stream()
+                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity())
+                .sum();
+
+        List<OrderItem> shippableItems = cart.getItems().stream()
+                .filter(item -> item.getProduct().isShippable())
+                .collect(Collectors.toList());
+
+        double shippingFee = shippingService.calculateShippingFee(shippableItems);
         double totalAmount = subtotal + shippingFee;
 
-        if (totalAmount > customer.getBalance()) {
-            throw new InsufficientBalanceException("Customer has insufficient balance.");
+        if (customer.getBalance() < totalAmount) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+
+        // Deduct product quantities
+        for (OrderItem item : cart.getItems()) {
+            item.getProduct().reduceQuantity(item.getQuantity());
         }
 
         customer.deductBalance(totalAmount);
 
-        if (!shippableItems.isEmpty()) {
-            shippingService.shipItems(shippableItems);
-        }
+        // Ship items
+        shippingService.ship(shippableItems);
 
-        System.out.println("** Checkout receipt **");
-        for (OrderItem item : items) {
-            System.out.println(item.getQuantity() + "x " + item.getProductName() + " " + (item.getProduct().getPrice() * item.getQuantity()));
-        }
-        System.out.println("----------------------");
-        System.out.println("Subtotal " + subtotal);
-        System.out.println("Shipping " + shippingFee);
-        System.out.println("Amount " + totalAmount);
-        System.out.println("Customer balance after payment: " + customer.getBalance());
+        // Print receipt
+        receiptPrinter.printCheckoutReceipt(cart.getItems(), subtotal, shippingFee, totalAmount, customer.getBalance());
     }
 }

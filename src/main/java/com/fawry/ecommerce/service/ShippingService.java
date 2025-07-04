@@ -1,43 +1,32 @@
 package com.fawry.ecommerce.service;
 
 import com.fawry.ecommerce.model.OrderItem;
-import com.fawry.ecommerce.model.Product;
-import com.fawry.ecommerce.model.Shippable;
 
 import java.util.List;
 
 public class ShippingService {
-    private static final double BASE_FEE = 30.0;
 
-    public void shipItems(List<OrderItem> items) {
-        double totalWeight = 0;
+    private final ReceiptPrinterService receiptPrinter;
 
-        System.out.println("** Shipment notice **");
-        for (OrderItem item : items) {
-            Product product = item.getProduct();
-            if (product instanceof Shippable && product.isShippable()) {
-                double weightPerUnit = product.getWeight();
-                double totalItemWeight = weightPerUnit * item.getQuantity();
-                String weightStr = formatWeight(totalItemWeight);
-
-                System.out.println(item.getQuantity() + "x " + product.getName() + " " + weightStr);
-                totalWeight += totalItemWeight;
-            }
-        }
-
-        String totalWeightStr = formatWeight(totalWeight);
-        System.out.println("Total package weight " + totalWeightStr);
+    public ShippingService(ReceiptPrinterService receiptPrinter) {
+        this.receiptPrinter = receiptPrinter;
     }
 
-    private String formatWeight(double weightKg) {
-        if (weightKg < 1.0) {
-            return (int) (weightKg * 1000) + "g";
-        } else {
-            return String.format("%.1fkg", weightKg);
+    public void ship(List<OrderItem> shippableItems) {
+        double totalWeight = shippableItems.stream()
+                .mapToDouble(item -> item.getProduct().getWeight() * item.getQuantity())
+                .sum();
+
+        if (!shippableItems.isEmpty()) {
+            receiptPrinter.printShipmentNotice(shippableItems, totalWeight);
         }
     }
 
-    public double calculateShippingFee() {
-        return BASE_FEE;
+    public double calculateShippingFee(List<OrderItem> shippableItems) {
+        double totalWeight = shippableItems.stream()
+                .mapToDouble(item -> item.getProduct().getWeight() * item.getQuantity())
+                .sum();
+
+        return totalWeight * 10; // Example: 10 per kg
     }
 }
