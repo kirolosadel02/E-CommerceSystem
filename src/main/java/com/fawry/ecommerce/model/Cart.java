@@ -8,7 +8,7 @@ import java.util.List;
 public class Cart {
     private final List<OrderItem> items = new ArrayList<>();
 
-    public void addProduct(Product product, int quantity) {
+    public void add(Product product, int quantity) {
         if (quantity <= 0) {
             throw new InvalidQuantityException("Quantity must be positive, got: " + quantity);
         }

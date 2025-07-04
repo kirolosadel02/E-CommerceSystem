@@ -68,11 +68,11 @@ public class Main {
 
         try {
             Cart cart = new Cart();
-            cart.addProduct(cheese, 2); // valid
-            cart.addProduct(biscuits, 1); // valid
-            cart.addProduct(tv, 1); // valid
-            cart.addProduct(mobile, 1); // valid
-            cart.addProduct(scratchCard, 1); // valid
+            cart.add(cheese, 2); // valid
+            cart.add(biscuits, 1); // valid
+            cart.add(tv, 1); // valid
+            cart.add(mobile, 1); // valid
+            cart.add(scratchCard, 1); // valid
             // cart.addProduct(cheese, 3); // would throw exception: quantity exceeds stock
             // cart.addProduct(expiredCheese, 1); // would throw exception: product expired
             // cart.addProduct(outOfStockTV, 1); // would throw exception: out of stock

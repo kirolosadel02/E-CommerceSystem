@@ -29,7 +29,7 @@ public class CheckoutServiceTest {
     void successfulCheckout() {
         Product cheese = new ProductBuilder().setName("Cheese").setPrice(100).setQuantity(2)
                 .setExpirable(LocalDate.now().plusDays(2)).setShippable(0.2).build();
-        cart.addProduct(cheese, 2);
+        cart.add(cheese, 2);
         assertDoesNotThrow(() -> checkoutService.checkout(customer, cart));
     }
 
@@ -43,7 +43,7 @@ public class CheckoutServiceTest {
     void expiredProductThrows() {
         Product expired = new ProductBuilder().setName("Old Cheese").setPrice(50).setQuantity(1)
                 .setExpirable(LocalDate.now().minusDays(1)).setShippable(0.2).build();
-        cart.addProduct(expired, 1);
+        cart.add(expired, 1);
         Exception ex = assertThrows(ProductExpiredException.class, () -> checkoutService.checkout(customer, cart));
         assertTrue(ex.getMessage().contains("is expired"));
     }
@@ -52,7 +52,7 @@ public class CheckoutServiceTest {
     void outOfStockThrows() {
         Product cheese = new ProductBuilder().setName("Cheese").setPrice(100).setQuantity(1)
                 .setExpirable(LocalDate.now().plusDays(2)).setShippable(0.2).build();
-        cart.addProduct(cheese, 1);
+        cart.add(cheese, 1);
         // Simulate another order reducing stock
         cheese.reduceQuantity(1);
         Exception ex = assertThrows(OutOfStockException.class, () -> checkoutService.checkout(customer, cart));
@@ -63,7 +63,7 @@ public class CheckoutServiceTest {
     void insufficientBalanceThrows() {
         Product cheese = new ProductBuilder().setName("Cheese").setPrice(1000).setQuantity(2)
                 .setExpirable(LocalDate.now().plusDays(2)).setShippable(0.2).build();
-        cart.addProduct(cheese, 2);
+        cart.add(cheese, 2);
         customer = new Customer("John", 100); // Not enough balance
         Exception ex = assertThrows(InsufficientBalanceException.class, () -> checkoutService.checkout(customer, cart));
         assertEquals("Insufficient balance", ex.getMessage());

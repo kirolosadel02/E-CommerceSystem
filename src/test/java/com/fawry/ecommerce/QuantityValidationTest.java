@@ -20,7 +20,7 @@ public class QuantityValidationTest {
                 .build();
         
         Cart cart = new Cart();
-        InvalidQuantityException ex = assertThrows(InvalidQuantityException.class, () -> cart.addProduct(product, -1));
+        InvalidQuantityException ex = assertThrows(InvalidQuantityException.class, () -> cart.add(product, -1));
         assertTrue(ex.getMessage().contains("must be positive"));
     }
 
@@ -35,7 +35,7 @@ public class QuantityValidationTest {
                 .build();
         
         Cart cart = new Cart();
-        InvalidQuantityException ex = assertThrows(InvalidQuantityException.class, () -> cart.addProduct(product, 0));
+        InvalidQuantityException ex = assertThrows(InvalidQuantityException.class, () -> cart.add(product, 0));
         assertTrue(ex.getMessage().contains("must be positive"));
     }
 
@@ -50,7 +50,7 @@ public class QuantityValidationTest {
                 .build();
         
         Cart cart = new Cart();
-        InvalidQuantityException ex = assertThrows(InvalidQuantityException.class, () -> cart.addProduct(product, 10));
+        InvalidQuantityException ex = assertThrows(InvalidQuantityException.class, () -> cart.add(product, 10));
         assertTrue(ex.getMessage().contains("exceeds available stock"));
     }
 

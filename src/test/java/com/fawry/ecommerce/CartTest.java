@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class CartTest {
     
     @Test
-    void shouldAddProduct_whenQuantityIsWithinStock() {
+    void shouldAdd_whenQuantityIsWithinStock() {
         Product cheese = new ProductBuilder()
                 .setName("Cheese")
                 .setPrice(100)
@@ -19,7 +19,7 @@ public class CartTest {
                 .build();
         
         Cart cart = new Cart();
-        assertDoesNotThrow(() -> cart.addProduct(cheese, 2));
+        assertDoesNotThrow(() -> cart.add(cheese, 2));
         assertEquals(1, cart.getItems().size());
         assertEquals(2, cart.getItems().get(0).getQuantity());
     }
@@ -43,8 +43,8 @@ public class CartTest {
                 .build();
         
         Cart cart = new Cart();
-        cart.addProduct(cheese, 2);
-        cart.addProduct(biscuits, 1);
+        cart.add(cheese, 2);
+        cart.add(biscuits, 1);
         
         assertEquals(2, cart.getItems().size());
         assertEquals(2, cart.getItems().get(0).getQuantity());
@@ -62,8 +62,8 @@ public class CartTest {
                 .build();
         
         Cart cart = new Cart();
-        cart.addProduct(cheese, 1);
-        cart.addProduct(cheese, 2);
+        cart.add(cheese, 1);
+        cart.add(cheese, 2);
         
         assertEquals(2, cart.getItems().size()); // Current implementation allows duplicates
         assertEquals(1, cart.getItems().get(0).getQuantity());
